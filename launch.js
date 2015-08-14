@@ -6,8 +6,6 @@ function $(selector) {
 
 var gTitle = $("#title");
 var gLogConsole = $("#logConsole");
-var gCanvas2d = $("#canvas2d");
-var gCanvas3d = $("#canvas3d");
 var gRan = false;
 var gJobs = [];
 
@@ -38,15 +36,15 @@ var gJobs = [];
 				name: "WebGLParticleEffect",
 				description: "Spread particle everywhere",
 				init: WebGLParticleEffect.init,
-				runBenchmark: WebGLParticleEffect.effectBench,
-				cleanup: WebGLParticleEffect.effectCleanup
+				runBenchmark: WebGLParticleEffect.runBench,
+				cleanup: WebGLParticleEffect.cleanup
 			}),
 			mainThreadBenchmark({
 				name: "ParticleEffect",
 				description: "Spread particle everywhere",
-				init: ParticleEffect.init,
-				runBenchmark: ParticleEffect.runBench,
-				cleanup: ParticleEffect.cleanup
+				init: CanvasParticleEffect.init,
+				runBenchmark: CanvasParticleEffect.runBench,
+				cleanup: CanvasParticleEffect.cleanup
 			})
 		];
 	}
@@ -56,10 +54,8 @@ var gJobs = [];
 			name: args.name,
 			description: args.description,	
 			createWorker: function() {
-				if (args.init) {
-					args.init(gCanvas2d);
-					args.init = null;
-				}
+				if (args.init)
+					args.init();
 
 				return {                                                                   
 					postMessage: function() {                                                
@@ -71,7 +67,7 @@ var gJobs = [];
 							worker.onmessage(event);                                             
 						}
 
-						bench(gCanvas2d);
+						bench();
 					},                                                                       
 					terminate: args.cleanup || function(){},                                        
 				};                                                                         
@@ -141,10 +137,27 @@ var gJobs = [];
 		runBenchmark();
 	}
 
-	loadScript("particleEffect.js").then(function() {
+	function toggleFullscreen() {
+		if (document.mozFullScreenElement)
+			document.mozCancelFullScreen();
+		else
+			document.documentElement.mozRequestFullScreen();
+	}
+
+	loadScript("canvasParticalEffect.js").then(function() {
 	loadScript("webGLParticleEffect.js").then(function() {
 		setupJobs();
+
 		window.addEventListener("keypress", run);
+		window.addEventListener("keydown", function(e) {
+			if (e.key == 'f')
+				toggleFullscreen();
+		}, false);
+		window.addEventListener('devicemotion', function(event) {
+			if (Math.abs(event.acceleration.x) >= 10)
+				run();
+		});
+
 		gTitle.addEventListener("click", run);
 		gTitle.addEventListener("touchend", run);
 	})});

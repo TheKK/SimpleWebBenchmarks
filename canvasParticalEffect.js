@@ -1,9 +1,9 @@
-var WebGLParticleEffect = {}
+var CanvasParticleEffect = {}
 
-WebGLParticleEffect.init = function() {
+CanvasParticleEffect.init = function() {
 }
 
-WebGLParticleEffect.runBench = function() {
+CanvasParticleEffect.runBench = function() {
 	var render;
 	var scene;
 	var camera;
@@ -48,7 +48,7 @@ WebGLParticleEffect.runBench = function() {
 		}
 	}
 
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.CanvasRenderer();
 	renderer.setSize(500, 500);
 	renderer.setClearColor(0xcccccc);
 
@@ -105,6 +105,6 @@ WebGLParticleEffect.runBench = function() {
 	mainLoop();
 }
 
-WebGLParticleEffect.cleanup = function() {
+CanvasParticleEffect.cleanup = function() {
 	document.body.removeChild(renderer.domElement);
 }
