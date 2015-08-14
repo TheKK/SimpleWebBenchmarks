@@ -1,0 +1,19 @@
+{
+	"name": "Simple benchmarks",
+	"description": "Is the name not clear enough?",
+	"launch_path": "/index.html",
+	"icons": {
+		"32": "/icon_32.png",
+		"64": "/icon_64.png",
+		"128": "/icon_128.png",
+		"256": "/icon_256.png"
+	},
+	"fullscreen": true,
+	"developer": {
+		"name": "Ying Ruei Liang (KK)",
+		"url": "http://twitter.com/kk_the_gamer"
+	},
+	"installs_allowed_from": ["*"],
+	"default_locale": "en",
+	"orientation": ["portrait"]
+}
