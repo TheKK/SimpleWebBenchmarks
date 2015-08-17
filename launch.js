@@ -154,6 +154,7 @@ var gJobs = [];
 	loadScript("canvasParticalEffect.js").then(function() {
 	loadScript("webGLParticleEffect.js").then(function() {
 	loadScript("textureLoading.js").then(function() {
+	loadScript("shaderCompile.js").then(function() {
 		setupJobs();
 
 		window.addEventListener("keypress", run);
@@ -168,5 +169,5 @@ var gJobs = [];
 
 		gTitle.addEventListener("click", run);
 		gTitle.addEventListener("touchend", run);
-	})})});
+	})})})});
 }).call(this)
