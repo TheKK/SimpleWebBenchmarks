@@ -162,7 +162,7 @@ var gJobs = [];
 				toggleFullscreen();
 		}, false);
 		window.addEventListener('devicemotion', function(event) {
-			if (Math.abs(event.acceleration.x) >= 10)
+			if (Math.abs(event.acceleration.x) >= 15)
 				run();
 		});
 
