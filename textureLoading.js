@@ -32,6 +32,8 @@ TextureLoading.runBench = function() {
 		gl.generateMipmap(gl.TEXTURE_2D);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 
+		gl.finish();
+
 		runtime--;
 		if (runtime === 0) {
 			time = Date.now() - start;

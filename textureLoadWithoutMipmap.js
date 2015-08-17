@@ -31,6 +31,8 @@ TextureLoadingWithoutMipmap.runBench = function() {
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 
+		gl.finish();
+
 		runtime--;
 		if (runtime === 0) {
 			time = Date.now() - start;
