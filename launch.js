@@ -155,6 +155,7 @@ var gJobs = [];
 	loadScript("webGLParticleEffect.js").then(function() {
 	loadScript("textureLoading.js").then(function() {
 	loadScript("shaderCompile.js").then(function() {
+	loadScript("textureLoadWithoutMipmap.js").then(function() {
 		setupJobs();
 
 		window.addEventListener("keypress", run);
@@ -169,5 +170,5 @@ var gJobs = [];
 
 		gTitle.addEventListener("click", run);
 		gTitle.addEventListener("touchend", run);
-	})})})});
+	})})})})});
 }).call(this)
