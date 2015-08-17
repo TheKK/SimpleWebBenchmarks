@@ -71,25 +71,25 @@ var gJobs = [];
 	function mainThreadBenchmark(args) {
 		return {
 			name: args.name,
-			description: args.description,	
+			description: args.description,
 			createWorker: function() {
 				if (args.init)
 					args.init();
 
-				return {                                                                   
-					postMessage: function() {                                                
-						var worker = this;                                                     
+				return {
+					postMessage: function() {
+						var worker = this;
 						var bench = args.runBenchmark;
 						window.onmessage = function(event) {
 							window.onmessage = null;
 							event.data.name = args.name;
-							worker.onmessage(event);                                             
+							worker.onmessage(event);
 						}
 
 						bench();
-					},                                                                       
-					terminate: args.cleanup || function(){},                                        
-				};                                                                         
+					},
+					terminate: args.cleanup || function(){},
+				};
 			}
 		};
 	}
