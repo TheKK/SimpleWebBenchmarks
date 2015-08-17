@@ -6,7 +6,6 @@
  * 	time. So how fast javascript engine creates and delete object directly
  * 	affect our gaming experience.
  *
- * How:
  */
 
 var DummyObject = function() {
