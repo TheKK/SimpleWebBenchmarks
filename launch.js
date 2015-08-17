@@ -10,15 +10,27 @@ var gRan = false;
 var gJobs = [];
 
 (function() {
-	function loadScript(filePath) {
+	function loadScripts(fileList) {
 		return new Promise(function(resolve, reject) {
-			var script = document.createElement("script");
-			script.src = filePath;
-			script.onload = function() {
-				console.log(filePath + " loaded");
-				resolve("haha");
+			var fileName;
+			var script;
+
+			if (fileList.length === 0) {
+				resolve("All scripts loaded");
+				return;
 			}
-			console.log(filePath + " loading ");
+
+			fileName = fileList[0];
+
+			script = document.createElement("script");
+			script.src = fileName;
+			script.onload = function() {
+				console.log(fileName + " loaded");
+				loadScripts(fileList.slice(1)).then(function() {
+					resolve();
+				});
+			}
+
 			document.getElementsByTagName("body")[0].appendChild(script);
 		});
 	}
@@ -151,11 +163,16 @@ var gJobs = [];
 			document.documentElement.mozRequestFullScreen();
 	}
 
-	loadScript("canvasParticalEffect.js").then(function() {
-	loadScript("webGLParticleEffect.js").then(function() {
-	loadScript("textureLoading.js").then(function() {
-	loadScript("shaderCompile.js").then(function() {
-	loadScript("textureLoadWithoutMipmap.js").then(function() {
+	var scriptsToLoad = [
+		"canvasParticalEffect.js",
+		"webGLParticleEffect.js",
+		"textureLoading.js",
+		"textureLoadWithoutMipmap.js",
+		"shaderCompile.js",
+		"textureLoadWithoutMipmap.js"
+	];
+
+	loadScripts(scriptsToLoad).then(function() {
 		setupJobs();
 
 		window.addEventListener("keypress", run);
@@ -170,5 +187,5 @@ var gJobs = [];
 
 		gTitle.addEventListener("click", run);
 		gTitle.addEventListener("touchend", run);
-	})})})})});
+	});
 }).call(this)
