@@ -45,6 +45,13 @@ var gJobs = [];
 				init: CanvasParticleEffect.init,
 				runBenchmark: CanvasParticleEffect.runBench,
 				cleanup: CanvasParticleEffect.cleanup
+			}),
+			mainThreadBenchmark({
+				name: "TextureLoading",
+				description: "How long it takes to register a 2D texture",
+				init: TextureLoading.init,
+				runBenchmark: TextureLoading.runBench,
+				cleanup: TextureLoading.cleanup
 			})
 		];
 	}
@@ -146,6 +153,7 @@ var gJobs = [];
 
 	loadScript("canvasParticalEffect.js").then(function() {
 	loadScript("webGLParticleEffect.js").then(function() {
+	loadScript("textureLoading.js").then(function() {
 		setupJobs();
 
 		window.addEventListener("keypress", run);
@@ -160,5 +168,5 @@ var gJobs = [];
 
 		gTitle.addEventListener("click", run);
 		gTitle.addEventListener("touchend", run);
-	})});
+	})})});
 }).call(this)
