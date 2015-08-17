@@ -9,30 +9,29 @@
  */
 
 var DummyObject = function() {
-	self.hp_ = 123;
-	self.mp_ = 321;
-	self.atk_ = 32;
-	self.def_ = 10;
-	self.dex_ = 23;
+	this.hp_ = 123;
+	this.mp_ = 321;
+	this.atk_ = 32;
+	this.def_ = 10;
+	this.dex_ = 23;
 
-	self.posX = 0;
-	self.posY = 0;
-	self.velX = 12;
-	self.velY = -9;
+	this.posX = 0;
+	this.posY = 0;
+	this.velX = 12;
+	this.velY = -9;
 
-	return {
-		update: function() {
-			self.posX += self.velX;
-			self.posY += self.velY;
-		},
+}
 
-		render: function() {
-		},
+DummyObject.prototype.update = function() {
+	this.posX += this.velX;
+	this.posY += this.velY;
+}
 
-		attack: function(target) {
-			target.hp() -= (self.atk_ - target.def());
-		}
-	};
+DummyObject.prototype.render = function() {
+}
+
+DummyObject.prototype.attack = function(target) {
+	target.hp() -= (this.atk_ - target.def());
 }
 
 function init() {
@@ -44,8 +43,6 @@ function runBenchmark() {
 
 		for (var j = 0; j < 1000; ++j)
 			dummyList.push(new DummyObject());
-
-		delete dummyList;
 	}
 }
 
