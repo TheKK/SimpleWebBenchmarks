@@ -38,7 +38,7 @@ function init() {
 }
 
 function runBenchmark() {
-	for (var i = 0; i < 100; ++i) {
+	for (var i = 0; i < 1000; ++i) {
 		var dummyList = [];
 
 		for (var j = 0; j < 1000; ++j)
