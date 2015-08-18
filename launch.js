@@ -208,14 +208,17 @@ var gJobs = [];
 	loadScripts(scriptsToLoad).then(function() {
 		setupJobs();
 
-		window.addEventListener("keypress", run);
 		window.addEventListener("keydown", function(e) {
-			if (e.key == 'f')
+			if (e.key == 'f') {
 				toggleFullscreen();
+			} else {
+				run();
+			}
 		}, false);
 		window.addEventListener('devicemotion', function(event) {
-			if (Math.abs(event.acceleration.x) >= 15)
+			if (Math.abs(event.acceleration.x) >= 15) {
 				run();
+			}
 		});
 
 		gTitle.addEventListener("click", run);
