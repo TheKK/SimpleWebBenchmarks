@@ -202,7 +202,8 @@ var gJobs = [];
 		"textureLoading.js",
 		"textureLoadWithoutMipmap.js",
 		"shaderCompile.js",
-		"textureLoadWithoutMipmap.js"
+		"textureLoadWithoutMipmap.js",
+		"shaderMatrixOperations.js"
 	];
 
 	loadScripts(scriptsToLoad).then(function() {
