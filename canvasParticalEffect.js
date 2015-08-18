@@ -1,12 +1,15 @@
-var CanvasParticleEffect = {}
+"use strict";
+
+var CanvasParticleEffect = {
+}
 
 CanvasParticleEffect.init = function() {
 }
 
 CanvasParticleEffect.runBench = function() {
-	var render;
-	var scene;
-	var camera;
+	var RENDER_WIDTH = 500, RENDER_HEIGHT = 500;
+	var RENDER_SCREEN_RATIO = RENDER_WIDTH / RENDER_HEIGHT;
+	var renderer, scene, camera;
 	var start, time;
 	var bulletList = []
 	var frameCount = 1;
@@ -19,10 +22,9 @@ CanvasParticleEffect.runBench = function() {
 		this.accX = 0;
 		this.accY = -0.1;
 
-		var geometry = new THREE.BoxGeometry(this.w, this.h, 30);
-		var material = new THREE.MeshBasicMaterial({
-				color: parseInt(0xff0000, 16)
-			});
+		var geometry = new THREE.BoxGeometry(this.w, this.h, 10);
+		var material = new THREE.MeshBasicMaterial({color: 0xff2255});
+
 		this.threeBox = new THREE.Mesh(geometry, material);
 		this.threeBox.position.x = posX;
 		this.threeBox.position.y = posY;
@@ -34,13 +36,6 @@ CanvasParticleEffect.runBench = function() {
 			this.threeBox.position.y += this.velY;
 		}
 
-		this.render = function() {
-			ctx.fillStyle = "red";
-			ctx.fillRect(this.threeBox.position.x - this.w / 2,
-				     this.threeBox.position.y - this.h / 2,
-				     this.w, this.h);
-		}
-
 		this.die = function() {
 			return (this.threeBox.position.x >= 250 ||
 				this.threeBox.position.x + this.w <= -250 ||
@@ -48,28 +43,49 @@ CanvasParticleEffect.runBench = function() {
 		}
 	}
 
-	renderer = new THREE.CanvasRenderer();
-	renderer.setSize(500, 500);
-	renderer.setClearColor(0xcccccc);
+	function adjustViewport() {
+		var winWidth = window.innerWidth, winHeight = window.innerHeight;
+		var rendWidth, rendHeight;
+		var screenRatio = winWidth / winHeight;
 
-	scene = new THREE.Scene();
+		if (screenRatio > RENDER_SCREEN_RATIO) {
+			rendWidth = RENDER_SCREEN_RATIO * winHeight;
+			rendHeight = winHeight;
 
-	camera = new THREE.OrthographicCamera(
-		-window.innerWidth / 2,
-		window.innerWidth / 2,
-		window.innerHeight / 2,
-		-window.innerHeight / 2,
-		1, 1000);
-	camera.position.z = 100;
+		} else {
+			rendWidth = winWidth;
+			rendHeight = rendWidth / RENDER_SCREEN_RATIO;
+		}
 
-	document.body.insertBefore(renderer.domElement, document.body.firstChild);
+		renderer.setSize(rendWidth, rendHeight);
+		window.scrollTo(0, 0);
+	}
 
-	for (var i = 0; i < 1000; ++i) {
-		var vx = -5 + Math.random() * 10;
-		var vy = -5 + Math.random() * 10;
-		var bullet = new Bullet(0, 200, vx, vy);
-		bulletList.push(bullet);
-		scene.add(bullet.threeBox);
+	function prepare() {
+		renderer = new THREE.CanvasRenderer();
+		adjustViewport();
+		renderer.setClearColor(0xcccccc);
+
+		scene = new THREE.Scene();
+
+		camera = new THREE.OrthographicCamera(
+			-RENDER_WIDTH / 2,
+			RENDER_WIDTH / 2,
+			RENDER_HEIGHT / 2,
+			-RENDER_HEIGHT / 2,
+			1, 1000);
+
+		camera.position.z = 100;
+
+		document.body.insertBefore(renderer.domElement, document.body.firstChild);
+
+		for (var i = 0; i < 1000; ++i) {
+			var vx = -5 + Math.random() * 10;
+			var vy = -5 + Math.random() * 10;
+			var bullet = new Bullet(0, 200, vx, vy);
+			bulletList.push(bullet);
+			scene.add(bullet.threeBox);
+		}
 	}
 
 	function mainLoop() {
@@ -101,10 +117,11 @@ CanvasParticleEffect.runBench = function() {
 		}
 	}
 
+	prepare();
 	start = Date.now();
 	mainLoop();
 }
 
 CanvasParticleEffect.cleanup = function() {
-	document.body.removeChild(renderer.domElement);
+	document.body.removeChild(document.body.firstChild);
 }
