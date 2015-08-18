@@ -35,39 +35,6 @@ var gJobs = [];
 		});
 	}
 
-	function setupJobs() {
-		gJobs = [
-			{
-				name: "objectInstancing",
-				description: "Construct and desctruct",	
-				createWorker: function() {
-					return new window.Worker("worker.js");
-				}
-			},
-			mainThreadBenchmark({
-				name: "WebGLParticleEffect",
-				description: "Spread particle everywhere",
-				init: WebGLParticleEffect.init,
-				runBenchmark: WebGLParticleEffect.runBench,
-				cleanup: WebGLParticleEffect.cleanup
-			}),
-			mainThreadBenchmark({
-				name: "ParticleEffect",
-				description: "Spread particle everywhere",
-				init: CanvasParticleEffect.init,
-				runBenchmark: CanvasParticleEffect.runBench,
-				cleanup: CanvasParticleEffect.cleanup
-			}),
-			mainThreadBenchmark({
-				name: "TextureLoading",
-				description: "How long it takes to register a 2D texture",
-				init: TextureLoading.init,
-				runBenchmark: TextureLoading.runBench,
-				cleanup: TextureLoading.cleanup
-			})
-		];
-	}
-
 	function mainThreadBenchmark(args) {
 		return {
 			name: args.name,
@@ -90,8 +57,70 @@ var gJobs = [];
 					},
 					terminate: args.cleanup || function(){},
 				};
-			}
+			},
+			enable: args.enable
 		};
+	}
+
+	function setupJobs() {
+		gJobs = [
+			{
+				name: "objectInstancing",
+				description: "Construct and desctruct",
+				createWorker: function() {
+					return new window.Worker("worker.js");
+				},
+				enable: true
+			},
+			mainThreadBenchmark({
+				name: "ShaderCompile",
+				description: "How long it takes to compile shaders",
+				init: ShaderCompile.init,
+				runBenchmark: ShaderCompile.runBench,
+				cleanup: ShaderCompile.cleanup,
+				enable: false
+			}),
+			mainThreadBenchmark({
+				name: "ShaderMatrixOperations",
+				description: "How long it takes to execute draw calls",
+				init: ShaderMatrixOperations.init,
+				runBenchmark: ShaderMatrixOperations.runBench,
+				cleanup: ShaderMatrixOperations.cleanup,
+				enable: false
+			}),
+			mainThreadBenchmark({
+				name: "TextureLoading",
+				description: "How long it takes to register a 2D texture",
+				init: TextureLoading.init,
+				runBenchmark: TextureLoading.runBench,
+				cleanup: TextureLoading.cleanup,
+				enable: false
+			}),
+			mainThreadBenchmark({
+				name: "TextureLoadingWithoutNoMipmap",
+				description: "How long it takes to register a 2D texture",
+				init: TextureLoadingWithoutMipmap.init,
+				runBenchmark: TextureLoadingWithoutMipmap.runBench,
+				cleanup: TextureLoadingWithoutMipmap.cleanup,
+				enable: false
+			}),
+			mainThreadBenchmark({
+				name: "WebGLParticleEffect",
+				description: "Spread particle everywhere",
+				init: WebGLParticleEffect.init,
+				runBenchmark: WebGLParticleEffect.runBench,
+				cleanup: WebGLParticleEffect.cleanup,
+				enable: false
+			}),
+			mainThreadBenchmark({
+				name: "ParticleEffect",
+				description: "Spread particle everywhere",
+				init: CanvasParticleEffect.init,
+				runBenchmark: CanvasParticleEffect.runBench,
+				cleanup: CanvasParticleEffect.cleanup,
+				enable: false
+			})
+		];
 	}
 
 	function addLog(msg) {
@@ -119,10 +148,15 @@ var gJobs = [];
 		index = index | 0;
 		job = gJobs[index];
 
-		/* All benchmakrs done */
-		if (!job) {
-			allBenchmarkDone();
-			return;
+		while (job.enable === false) {
+			++index;
+			job = gJobs[index];
+
+			/* All benchmakrs done */
+			if (!job) {
+				allBenchmarkDone();
+				return;
+			}
 		}
 
 		benchWorker = job.createWorker();
@@ -136,8 +170,7 @@ var gJobs = [];
 
 			benchWorker.terminate();
 
-			++index;
-			runBenchmark(index);
+			runBenchmark(index + 1);
 		};
 
 		benchWorker.postMessage({
