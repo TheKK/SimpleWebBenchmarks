@@ -58,6 +58,7 @@ var gJobs = [];
 					terminate: args.cleanup || function(){},
 				};
 			},
+			checkSupport: args.checkSupport,
 			enable: args.enable
 		};
 	}
@@ -70,6 +71,9 @@ var gJobs = [];
 				createWorker: function() {
 					return new window.Worker("worker.js");
 				},
+				checkSupport: function() {
+					return window.Worker ? true : false;
+				},
 				enable: true
 			},
 			mainThreadBenchmark({
@@ -78,7 +82,10 @@ var gJobs = [];
 				init: ShaderCompile.init,
 				runBenchmark: ShaderCompile.runBench,
 				cleanup: ShaderCompile.cleanup,
-				enable: false
+				checkSupport: function() {
+					return true;
+				},
+				enable: true
 			}),
 			mainThreadBenchmark({
 				name: "ShaderMatrixOperations",
@@ -86,6 +93,9 @@ var gJobs = [];
 				init: ShaderMatrixOperations.init,
 				runBenchmark: ShaderMatrixOperations.runBench,
 				cleanup: ShaderMatrixOperations.cleanup,
+				checkSupport: function() {
+					return true;
+				},
 				enable: false
 			}),
 			mainThreadBenchmark({
@@ -94,7 +104,10 @@ var gJobs = [];
 				init: TextureLoading.init,
 				runBenchmark: TextureLoading.runBench,
 				cleanup: TextureLoading.cleanup,
-				enable: false
+				checkSupport: function() {
+					return false;
+				},
+				enable: true
 			}),
 			mainThreadBenchmark({
 				name: "TextureLoadingWithoutNoMipmap",
@@ -102,6 +115,9 @@ var gJobs = [];
 				init: TextureLoadingWithoutMipmap.init,
 				runBenchmark: TextureLoadingWithoutMipmap.runBench,
 				cleanup: TextureLoadingWithoutMipmap.cleanup,
+				checkSupport: function() {
+					return true;
+				},
 				enable: false
 			}),
 			mainThreadBenchmark({
@@ -110,6 +126,9 @@ var gJobs = [];
 				init: WebGLParticleEffect.init,
 				runBenchmark: WebGLParticleEffect.runBench,
 				cleanup: WebGLParticleEffect.cleanup,
+				checkSupport: function() {
+					return true;
+				},
 				enable: false
 			}),
 			mainThreadBenchmark({
@@ -118,6 +137,9 @@ var gJobs = [];
 				init: CanvasParticleEffect.init,
 				runBenchmark: CanvasParticleEffect.runBench,
 				cleanup: CanvasParticleEffect.cleanup,
+				checkSupport: function() {
+					return true;
+				},
 				enable: false
 			})
 		];
@@ -148,7 +170,11 @@ var gJobs = [];
 		index = index | 0;
 		job = gJobs[index];
 
-		while (job.enable === false) {
+		while ((job.enable === false) || (!job.checkSupport())) {
+			if (!job.checkSupport()) {
+				addLog("Benchmak '" + job.name + "' is not support by your browser, skipped");
+			}
+
 			++index;
 			job = gJobs[index];
 
@@ -209,6 +235,7 @@ var gJobs = [];
 	loadScripts(scriptsToLoad).then(function() {
 		setupJobs();
 
+		window.addEventListener("keypress", run);
 		window.addEventListener("keydown", function(e) {
 			if (e.key == 'f') {
 				toggleFullscreen();
