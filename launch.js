@@ -140,7 +140,18 @@ var gJobs = [];
 				checkSupport: function() {
 					return true;
 				},
-				enable: false
+				enable: true
+			}),
+			mainThreadBenchmark({
+				name: "Monjori benchmark",
+				description: "Monjori",
+				init: Monjori.init,
+				runBenchmark: Monjori.runBench,
+				cleanup: Monjori.cleanup,
+				checkSupport: function() {
+					return true;
+				},
+				enable: true
 			})
 		];
 	}
@@ -233,7 +244,8 @@ var gJobs = [];
 		"textureLoadWithoutMipmap.js",
 		"shaderCompile.js",
 		"textureLoadWithoutMipmap.js",
-		"shaderMatrixOperations.js"
+		"shaderMatrixOperations.js",
+		"monjori.js"
 	];
 
 	window.onload = function() {
