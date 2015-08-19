@@ -170,19 +170,23 @@ var gJobs = [];
 		index = index | 0;
 		job = gJobs[index];
 
-		while ((job.enable === false) || (!job.checkSupport())) {
-			if (!job.checkSupport()) {
-				addLog("Benchmak '" + job.name + "' is not support by your browser, skipped");
+		while (job) {
+			if (job.enable === true) {
+				if (job.checkSupport() === true) {
+					break;
+				} else {
+					addLog("Benchmak '" + job.name + "' is not support by your browser, skipped");
+				}
+			} else {
+				++index;
+				job = gJobs[index];
 			}
+		}
 
-			++index;
-			job = gJobs[index];
-
-			/* All benchmakrs done */
-			if (!job) {
-				allBenchmarkDone();
-				return;
-			}
+		/* All benchmakrs done */
+		if (!job) {
+			allBenchmarkDone();
+			return;
 		}
 
 		benchWorker = job.createWorker();
@@ -232,24 +236,27 @@ var gJobs = [];
 		"shaderMatrixOperations.js"
 	];
 
-	loadScripts(scriptsToLoad).then(function() {
-		setupJobs();
+	window.onload = function() {
+		loadScripts(scriptsToLoad).then(function() {
+			setupJobs();
+			gTitle.innerHTML = "- Press Any Key To Start -";
 
-		window.addEventListener("keypress", run);
-		window.addEventListener("keydown", function(e) {
-			if (e.key == 'f') {
-				toggleFullscreen();
-			} else {
-				run();
-			}
-		}, false);
-		window.addEventListener('devicemotion', function(event) {
-			if (Math.abs(event.acceleration.x) >= 15) {
-				run();
-			}
+			window.addEventListener("keypress", run);
+			window.addEventListener("keydown", function(e) {
+				if (e.key == 'f') {
+					toggleFullscreen();
+				} else {
+					run();
+				}
+			}, false);
+			window.addEventListener('devicemotion', function(event) {
+				if (Math.abs(event.acceleration.x) >= 15) {
+					run();
+				}
+			});
+
+			gTitle.addEventListener("click", run);
+			gTitle.addEventListener("touchend", run);
 		});
-
-		gTitle.addEventListener("click", run);
-		gTitle.addEventListener("touchend", run);
-	});
+	};
 }).call(this)
