@@ -49,23 +49,10 @@ Monjori.runBench = function() {
 		"	gl_Position = vec4(position, 1.0);" +
 		"}"
 	;
-	var frameCount = 1;
+	var frameCount = 0;
 
 	function adjustViewport() {
-		var winWidth = window.innerWidth, winHeight = window.innerHeight;
-		var rendWidth, rendHeight;
-		var screenRatio = winWidth / winHeight;
-
-		if (screenRatio > RENDER_SCREEN_RATIO) {
-			rendWidth = RENDER_SCREEN_RATIO * winHeight;
-			rendHeight = winHeight;
-
-		} else {
-			rendWidth = winWidth;
-			rendHeight = rendWidth / RENDER_SCREEN_RATIO;
-		}
-
-		renderer.setSize(rendWidth, rendHeight);
+		renderer.setSize(window.innerWidth, window.innerHeight);
 		window.scrollTo(0, 0);
 	}
 
@@ -113,7 +100,7 @@ Monjori.runBench = function() {
 		renderer.render(scene, camera);
 
 		++frameCount;
-		if (frameCount >= 300) {
+		if (frameCount === 1200) {
 			isRunning = false;
 		}
 
