@@ -63,6 +63,27 @@ var gJobs = [];
 		};
 	}
 
+	function testVsyncRate() {
+		return new Promise(function(resolve, reject) {
+			var start;
+			var TARGET_FRAME = 300;
+			var frame = 0;
+
+			function boringLoop() {
+				++frame;
+
+				if (frame === TARGET_FRAME) {
+					resolve((TARGET_FRAME / (Date.now() - start) * 1000) + " Hz");
+				} else {
+					requestAnimationFrame(boringLoop);
+				}
+			}
+
+			start = Date.now();
+			boringLoop();
+		})
+	}
+
 	function setupJobs() {
 		gJobs = [
 			{
@@ -88,24 +109,13 @@ var gJobs = [];
 				enable: true
 			}),
 			mainThreadBenchmark({
-				name: "ShaderMatrixOperations",
-				description: "How long it takes to execute draw calls",
-				init: ShaderMatrixOperations.init,
-				runBenchmark: ShaderMatrixOperations.runBench,
-				cleanup: ShaderMatrixOperations.cleanup,
-				checkSupport: function() {
-					return true;
-				},
-				enable: false
-			}),
-			mainThreadBenchmark({
 				name: "TextureLoading",
 				description: "How long it takes to register a 2D texture",
 				init: TextureLoading.init,
 				runBenchmark: TextureLoading.runBench,
 				cleanup: TextureLoading.cleanup,
 				checkSupport: function() {
-					return false;
+					return true;
 				},
 				enable: true
 			}),
@@ -118,7 +128,7 @@ var gJobs = [];
 				checkSupport: function() {
 					return true;
 				},
-				enable: false
+				enable: true
 			}),
 			mainThreadBenchmark({
 				name: "WebGLParticleEffect",
@@ -129,7 +139,7 @@ var gJobs = [];
 				checkSupport: function() {
 					return true;
 				},
-				enable: false
+				enable: true
 			}),
 			mainThreadBenchmark({
 				name: "ParticleEffect",
