@@ -110,7 +110,10 @@ Monjori.runBench = function() {
 			requestAnimationFrame(mainLoop);
 		} else {
 			time = Date.now() - start;	
-			window.postMessage({time: frameCount / time * 1000}, "*");
+			window.postMessage({
+				resultName: "FPS",
+				resultValue: frameCount / time * 1000
+			}, "*");
 		}
 	}
 

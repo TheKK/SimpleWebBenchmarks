@@ -57,7 +57,7 @@ function mainThreadBenchmark(args) {
 					var bench = args.runBenchmark;
 					window.onmessage = function(event) {
 						window.onmessage = null;
-						event.data.name = args.name;
+						event.data.benchmarkName = args.name;
 						worker.onmessage(event);
 					}
 
@@ -118,7 +118,7 @@ function setupJobs() {
 			checkSupport: function() {
 				return true;
 			},
-			enable: true
+			enable: false
 		}),
 		mainThreadBenchmark({
 			name: "TextureLoading",
@@ -129,7 +129,7 @@ function setupJobs() {
 			checkSupport: function() {
 				return true;
 			},
-			enable: true
+			enable: false
 		}),
 		mainThreadBenchmark({
 			name: "TextureLoadingWithoutNoMipmap",
@@ -140,7 +140,7 @@ function setupJobs() {
 			checkSupport: function() {
 				return true;
 			},
-			enable: true
+			enable: false
 		}),
 		mainThreadBenchmark({
 			name: "WebGLDrawCall",
@@ -285,12 +285,15 @@ function runBenchmark(index) {
 	setRunningBenchName(job.name);
 
 	benchWorker.onmessage = function(event){
-		var name = event.data.name;
-		var time = event.data.time;
+		var benchmarkName = event.data.benchmarkName;
+		var resultName = event.data.resultName;
+		var resultValue = event.data.resultValue;
 
-		var resultMsg = "Name: " + name + ", Time: " + time + "\n";
+		var resultMsg = "Name: " + benchmarkName + ", " +
+			resultName + ": " + resultValue + "\n";
+
 		addLog(resultMsg, job.description);
-		addResult(name, time);
+		addResult(benchmarkName, resultValue);
 
 		benchWorker.terminate();
 
@@ -298,7 +301,7 @@ function runBenchmark(index) {
 	};
 
 	benchWorker.postMessage({
-		name: job.name
+		benchmarkName: job.name
 	});
 }
 

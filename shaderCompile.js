@@ -52,7 +52,10 @@ ShaderCompile.runBench = function () {
 
 	time = Date.now() - start;
 
-	window.postMessage({time: time / 1000}, "*");
+	window.postMessage({
+		resultName: "time(ms)",
+		resultValue: time
+	}, "*");
 }
 
 ShaderCompile.cleanup = function() {

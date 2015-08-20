@@ -36,7 +36,10 @@ TextureLoadingWithoutMipmap.runBench = function() {
 		runtime--;
 		if (runtime === 0) {
 			time = Date.now() - start;
-			window.postMessage({time: (time / RUN_TIME) / 1000}, "*");
+			window.postMessage({
+				resultName: "time(ms)",
+				resultValue: (time / RUN_TIME)
+			}, "*");
 		} else {
 			bindTexture();
 		}

@@ -1,6 +1,6 @@
 onmessage = function(event) {
-	var name = event.data.name;
-	var benchmarkFilePath = "js/benchmarks/" + name + ".js";
+	var benchmarkName = event.data.benchmarkName;
+	var benchmarkFilePath = "js/benchmarks/" + benchmarkName + ".js";
 	var start, time;
 
 	importScripts(benchmarkFilePath);
@@ -12,7 +12,8 @@ onmessage = function(event) {
 	cleanup();
 
 	postMessage({
-		name: name,
-		time: time
+		benchmarkName: benchmarkName,
+		resultName: "time(ms)",
+		resultValue: time
 	});
 };
