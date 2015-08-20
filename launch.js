@@ -233,8 +233,8 @@ function descBoxMouseOut(event) {
 }
 
 function descBoxMouseMove(event) {
-	gBenchDescBox.style.left = (event.clientX + 20) + "px";
-	gBenchDescBox.style.top = (event.clientY + 20) + "px";
+	gBenchDescBox.style.left = (event.clientX + window.scrollX + 20) + "px";
+	gBenchDescBox.style.top = (event.clientY + window.scrollY + 20) + "px";
 }
 
 function allBenchmarkDone() {
