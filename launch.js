@@ -8,6 +8,8 @@ var gTitle = $("#title");
 var gLogConsole = $("#logConsole");
 var gRunningBenchBox = $("#runningBenchBox");
 var gBenchDescBox = $("#benchDescBox");
+var gResultTable = $("#resultTable");
+var gShowcase = $("#showcase");
 var gRan = false;
 var gJobs = [];
 var gUrlToPost = null;
@@ -239,8 +241,10 @@ function descBoxMouseMove(event) {
 
 function allBenchmarkDone() {
 	gTitle.innerHTML = "- All Done!! -";
-	hideRunningBenchBox();
 	descBoxMouseOut();
+	gShowcase.style.display = "none";
+	gResultTable.style.display = "block";
+	hideRunningBenchBox();
 
 	if (gUrlToPost) {
 		postResult(gUrlToPost);
@@ -309,6 +313,8 @@ function run() {
 	showRunninBenchBox();
 	clearLog();
 	clearResult();
+	gResultTable.style.display = "none";
+	gShowcase.style.display = "block";
 
 	runBenchmark();
 }
