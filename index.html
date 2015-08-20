@@ -22,22 +22,25 @@
 				font-size: 5vw;
 			}
 			#runningBenchBox {
-				background: #006699;
-				color: #ffffff;
-				font-size: 2vw;
-				padding: 0.8vmax;
 				margin-left: 2vmax;
 				margin-top: 2vmax;
+			}
+			.textBox {
+				background: #006699;
+				color: #ffffff;
+				font-size: 2.5vmax;
+				padding: 0.8vmax;
 				box-shadow: -0.7vmax -0.7vmax 0px #333333;
 				position: absolute;
-				display: block;
+				display: none;
 			}
 		</style>
 	</head>
 	<body>
 		<div style="text-align:center">
 			<div id="showcase">
-				<div id="runningBenchBox">bye sjkdfl sdj kldj dk</div>
+				<div id="runningBenchBox" class="textBox"></div>
+				<div id="benchDescBox" class="textBox">This is for testing</div>
 			</div>
 			<h1 id="title">- Loading... -</h1>
 			<div id="logConsole">

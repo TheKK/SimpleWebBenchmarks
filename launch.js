@@ -7,6 +7,7 @@ function $(selector) {
 var gTitle = $("#title");
 var gLogConsole = $("#logConsole");
 var gRunningBenchBox = $("#runningBenchBox");
+var gBenchDescBox = $("#benchDescBox");
 var gRan = false;
 var gJobs = [];
 var gUrlToPost = null;
@@ -190,10 +191,18 @@ function postResult(url) {
 	xmlHttp.send("results=" + JSON.stringify(gResults));
 }
 
-function addLog(msg) {
+function addLog(msg, desc) {
 	var newP = document.createElement("p");
 
 	newP.innerHTML = msg;
+
+	if (desc) {
+		newP.desc = desc;
+		newP.addEventListener("mouseover", descBoxMouseOver);
+		newP.addEventListener("mouseout", descBoxMouseOut);
+		newP.addEventListener("mousemove", descBoxMouseMove);
+	}
+
 	gLogConsole.appendChild(newP);
 }
 
@@ -212,6 +221,20 @@ function hideRunningBenchBox() {
 
 function showRunninBenchBox() {
 	gRunningBenchBox.style.display = "block";
+}
+
+function descBoxMouseOver(event) {
+	gBenchDescBox.style.display = "block";
+	gBenchDescBox.innerHTML = event.target.desc;
+}
+
+function descBoxMouseOut(event) {
+	gBenchDescBox.style.display = "none";
+}
+
+function descBoxMouseMove(event) {
+	gBenchDescBox.style.left = (event.clientX + 20) + "px";
+	gBenchDescBox.style.top = (event.clientY + 20) + "px";
 }
 
 function allBenchmarkDone() {
@@ -261,7 +284,7 @@ function runBenchmark(index) {
 		var time = event.data.time;
 
 		var resultMsg = "Name: " + name + ", Time: " + time + "\n";
-		addLog(resultMsg);
+		addLog(resultMsg, job.description);
 		addResult(name, time);
 
 		benchWorker.terminate();
