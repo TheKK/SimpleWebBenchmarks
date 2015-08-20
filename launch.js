@@ -240,6 +240,7 @@ function descBoxMouseMove(event) {
 function allBenchmarkDone() {
 	gTitle.innerHTML = "- All Done!! -";
 	hideRunningBenchBox();
+	descBoxMouseOut();
 
 	if (gUrlToPost) {
 		postResult(gUrlToPost);
