@@ -100,7 +100,7 @@ function setupJobs() {
 	gJobs = [
 		{
 			name: "objectInstancing",
-			description: "Construct and desctruct",
+			description: "Construct and desctruct objects",
 			createWorker: function() {
 				return new window.Worker("worker.js");
 			},
@@ -111,7 +111,7 @@ function setupJobs() {
 		},
 		mainThreadBenchmark({
 			name: "ShaderCompile",
-			description: "How long it takes to compile shaders",
+			description: "How long it takes to compile WebGL shaders",
 			init: ShaderCompile.init,
 			runBenchmark: ShaderCompile.runBench,
 			cleanup: ShaderCompile.cleanup,
@@ -133,7 +133,7 @@ function setupJobs() {
 		}),
 		mainThreadBenchmark({
 			name: "TextureLoadingWithoutNoMipmap",
-			description: "How long it takes to register a 2D texture",
+			description: "How long it takes to register a 2D texture, without mipmap",
 			init: TextureLoadingWithoutMipmap.init,
 			runBenchmark: TextureLoadingWithoutMipmap.runBench,
 			cleanup: TextureLoadingWithoutMipmap.cleanup,
@@ -143,22 +143,22 @@ function setupJobs() {
 			enable: true
 		}),
 		mainThreadBenchmark({
-			name: "WebGLParticleEffect",
-			description: "Spread particle everywhere",
-			init: WebGLParticleEffect.init,
-			runBenchmark: WebGLParticleEffect.runBench,
-			cleanup: WebGLParticleEffect.cleanup,
+			name: "WebGLDrawCall",
+			description: "How fast for browser to handle lots of draw calls",
+			init: WebGLDrawCall.init,
+			runBenchmark: WebGLDrawCall.runBench,
+			cleanup: WebGLDrawCall.cleanup,
 			checkSupport: function() {
 				return true;
 			},
 			enable: true
 		}),
 		mainThreadBenchmark({
-			name: "ParticleEffect",
-			description: "Spread particle everywhere",
-			init: CanvasParticleEffect.init,
-			runBenchmark: CanvasParticleEffect.runBench,
-			cleanup: CanvasParticleEffect.cleanup,
+			name: "Canvas2dDrawCall",
+			description: "How fast for browser to handle lots of draw calls",
+			init: Canvas2dDrawCall.init,
+			runBenchmark: Canvas2dDrawCall.runBench,
+			cleanup: Canvas2dDrawCall.cleanup,
 			checkSupport: function() {
 				return true;
 			},
@@ -166,7 +166,7 @@ function setupJobs() {
 		}),
 		mainThreadBenchmark({
 			name: "Monjori benchmark",
-			description: "Monjori",
+			description: "Test shader's caculation performance",
 			init: Monjori.init,
 			runBenchmark: Monjori.runBench,
 			cleanup: Monjori.cleanup,
@@ -327,13 +327,11 @@ function toggleFullscreen() {
 }
 
 var scriptsToLoad = [
-	"canvasParticalEffect.js",
-	"webGLParticleEffect.js",
+	"canvas2dDrawCall.js",
+	"webGLDrawCall.js",
+	"shaderCompile.js",
 	"textureLoading.js",
 	"textureLoadWithoutMipmap.js",
-	"shaderCompile.js",
-	"textureLoadWithoutMipmap.js",
-	"shaderMatrixOperations.js",
 	"monjori.js"
 ];
 

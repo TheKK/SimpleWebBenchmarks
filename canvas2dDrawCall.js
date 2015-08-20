@@ -1,46 +1,30 @@
 "use strict";
 
-var CanvasParticleEffect = {
+var Canvas2dDrawCall = {
 }
 
-CanvasParticleEffect.init = function() {
+Canvas2dDrawCall.init = function() {
 }
 
-CanvasParticleEffect.runBench = function() {
+Canvas2dDrawCall.runBench = function() {
 	var RENDER_WIDTH = 500, RENDER_HEIGHT = 500;
 	var RENDER_SCREEN_RATIO = RENDER_WIDTH / RENDER_HEIGHT;
 	var renderer, scene, camera;
 	var start, time;
 	var bulletList = []
-	var frameCount = 1;
+	var frameCount = 0;
+	var isRunning = true;
 
-	var Bullet = function(posX, posY, velX, velY) {
+	var Bullet = function(posX, posY) {
 		this.w = 10;
 		this.h = 10;
-		this.velX = velX;
-		this.velY = velY;
-		this.accX = 0;
-		this.accY = -0.1;
 
 		var geometry = new THREE.BoxGeometry(this.w, this.h, 10);
-		var material = new THREE.MeshBasicMaterial({color: 0xff2255});
+		var material = new THREE.MeshBasicMaterial({color: 0x030101});
 
 		this.threeBox = new THREE.Mesh(geometry, material);
 		this.threeBox.position.x = posX;
 		this.threeBox.position.y = posY;
-
-		this.update = function() {
-			this.velX += this.accX;
-			this.velY += this.accY;
-			this.threeBox.position.x += this.velX;
-			this.threeBox.position.y += this.velY;
-		}
-
-		this.die = function() {
-			return (this.threeBox.position.x >= 250 ||
-				this.threeBox.position.x + this.w <= -250 ||
-				this.threeBox.position.y <= -250);
-		}
 	}
 
 	function adjustViewport() {
@@ -63,10 +47,11 @@ CanvasParticleEffect.runBench = function() {
 
 	function prepare() {
 		var showcase;
+		var renderX, renderY;
 
 		renderer = new THREE.CanvasRenderer();
 		adjustViewport();
-		renderer.setClearColor(0xcccccc);
+		renderer.setClearColor(0xeeeeee);
 
 		scene = new THREE.Scene();
 
@@ -83,34 +68,21 @@ CanvasParticleEffect.runBench = function() {
 		showcase.appendChild(renderer.domElement);
 
 		for (var i = 0; i < 1000; ++i) {
-			var vx = -5 + Math.random() * 10;
-			var vy = -5 + Math.random() * 10;
-			var bullet = new Bullet(0, 200, vx, vy);
-			bulletList.push(bullet);
+			var x = -RENDER_WIDTH / 2 + Math.random() * RENDER_WIDTH;
+			var y = -RENDER_HEIGHT / 2 + Math.random() * RENDER_HEIGHT;
+			var bullet = new Bullet(x, y);
 			scene.add(bullet.threeBox);
 		}
 	}
 
 	function mainLoop() {
-		var isRunning = true;
-
-		// Update
-		for (var i = 0; i < bulletList.length; ++i)
-			bulletList[i].update();
-
-		for (var i = 0; i < bulletList.length; ++i) {
-			if (!bulletList[i].die()) {
-				isRunning = true;
-				break;
-			}
-
+		++frameCount;
+		if (frameCount === 300) {
 			isRunning = false;
 		}
 
 		// Draw
 		renderer.render(scene, camera);
-
-		++frameCount;
 
 		if (isRunning) {
 			requestAnimationFrame(mainLoop);
@@ -125,7 +97,7 @@ CanvasParticleEffect.runBench = function() {
 	mainLoop();
 }
 
-CanvasParticleEffect.cleanup = function() {
+Canvas2dDrawCall.cleanup = function() {
 	var showcase;
 
 	showcase = document.getElementById("showcase");
