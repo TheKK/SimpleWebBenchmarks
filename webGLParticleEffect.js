@@ -62,6 +62,8 @@ WebGLParticleEffect.runBench = function() {
 	}
 
 	function prepare() {
+		var showcase;
+
 		renderer = new THREE.WebGLRenderer();
 		adjustViewport();
 		renderer.setClearColor(0xcccccc);
@@ -77,7 +79,8 @@ WebGLParticleEffect.runBench = function() {
 
 		camera.position.z = 100;
 
-		document.body.insertBefore(renderer.domElement, document.body.firstChild);
+		showcase = document.getElementById("showcase");
+		showcase.appendChild(renderer.domElement);
 
 		for (var i = 0; i < 1000; ++i) {
 			var vx = -5 + Math.random() * 10;
@@ -123,5 +126,8 @@ WebGLParticleEffect.runBench = function() {
 }
 
 WebGLParticleEffect.cleanup = function() {
-	document.body.removeChild(document.body.firstChild);
+	var showcase;
+
+	showcase = document.getElementById("showcase");
+	showcase.removeChild(showcase.lastChild);
 }

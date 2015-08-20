@@ -6,6 +6,7 @@ function $(selector) {
 
 var gTitle = $("#title");
 var gLogConsole = $("#logConsole");
+var gRunningBenchBox = $("#runningBenchBox");
 var gRan = false;
 var gJobs = [];
 var gUrlToPost = null;
@@ -201,8 +202,21 @@ function clearLog() {
 		gLogConsole.removeChild(gLogConsole.lastChild);
 }
 
+function setRunningBenchName(name) {
+	gRunningBenchBox.innerHTML = name;
+}
+
+function hideRunningBenchBox() {
+	gRunningBenchBox.style.display = "none";
+}
+
+function showRunninBenchBox() {
+	gRunningBenchBox.style.display = "block";
+}
+
 function allBenchmarkDone() {
 	gTitle.innerHTML = "- All Done!! -";
+	hideRunningBenchBox();
 
 	if (gUrlToPost) {
 		postResult(gUrlToPost);
@@ -239,6 +253,9 @@ function runBenchmark(index) {
 
 	benchWorker = job.createWorker();
 
+	/* Show name of benchmark in floating box */
+	setRunningBenchName(job.name);
+
 	benchWorker.onmessage = function(event){
 		var name = event.data.name;
 		var time = event.data.time;
@@ -264,6 +281,8 @@ function run() {
 		gRan = true;
 
 	title.innerHTML = "- Benchmarks Running -"
+	setRunningBenchName("Waiting...");
+	showRunninBenchBox();
 	clearLog();
 	clearResult();
 

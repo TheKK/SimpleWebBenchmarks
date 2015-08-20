@@ -58,6 +58,7 @@ Monjori.runBench = function() {
 
 	function prepare() {
 		var geometry, material, mesh;
+		var showcase;
 
 		renderer = new THREE.WebGLRenderer();
 		adjustViewport();
@@ -88,7 +89,8 @@ Monjori.runBench = function() {
 		uniforms.resolution.value.x = renderer.domElement.width;
 		uniforms.resolution.value.y = renderer.domElement.height;
 
-		document.body.insertBefore(renderer.domElement, document.body.firstChild);
+		showcase = document.getElementById("showcase");
+		showcase.appendChild(renderer.domElement);
 	}
 
 	function mainLoop() {
@@ -118,5 +120,8 @@ Monjori.runBench = function() {
 }
 
 Monjori.cleanup = function() {
-	document.body.removeChild(document.body.firstChild);
+	var showcase;
+
+	showcase = document.getElementById("showcase");
+	showcase.removeChild(showcase.lastChild);
 }
